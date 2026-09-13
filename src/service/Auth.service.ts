@@ -1,7 +1,7 @@
-import { createUsers, selectUsers } from "../model/ModuleUsers.module";
+import { createUsers, selectUsers } from "../model/ModuleUsers.module.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import { privateKeys } from "../private/jwt/jwt";
+import { privateKeys } from "../private/jwt/jwt.js";
 import validator from "validator"
 interface LoginPayload {
     email: string;
@@ -10,7 +10,7 @@ interface LoginPayload {
 interface GoogleType {
     name: string;
     email: string;
-    password? : null
+    password?: string | null
 }
 interface RegisterPayload {
     name: string;
@@ -70,7 +70,7 @@ export const serviceRegister = async (payload: RegisterPayload) => {
 }
 
 export const serviceGoogle = async (payload: GoogleType) => {
-    const { name, email } = payload;
+    const { name, email, password } = payload;
 
     if (!validateEmail(email)) {
         throw new Error("INVALID_EMAIL")
@@ -84,7 +84,7 @@ export const serviceGoogle = async (payload: GoogleType) => {
     await createUsers({
         name,
         email,
-        password : null
+        password
     })
 
     return {
