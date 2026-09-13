@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import jwt from "jsonwebtoken"
-import { publicKeys } from "../private/jwt/jwt";
+import { publicKeys } from "../private/jwt/jwt.js";
 declare global{
     namespace Express{
         interface Request {
