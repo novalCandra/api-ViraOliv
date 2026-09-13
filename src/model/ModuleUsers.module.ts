@@ -1,5 +1,5 @@
-import { knex, DbConfigKnex } from "./knex"
-const db = knex(DbConfigKnex?.development)
+import { dbKnex } from "./knex.js";
+const db = dbKnex
 
 interface TypeUsers {
     name: string;

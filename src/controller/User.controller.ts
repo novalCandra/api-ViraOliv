@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { profileUpdateUsers, profileUsers } from "../model/ModuleUsers.module";
-import { AuthenticatedRequest } from "../@types/types";
+import { profileUpdateUsers, profileUsers } from "../model/ModuleUsers.module.js";
+import { AuthenticatedRequest } from "../@types/types.js";
 export const ProfileUsersController = async (req: AuthenticatedRequest, res: Response) => {
     const userProfile = req.users?.id
     try {
