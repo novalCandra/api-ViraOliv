@@ -10,7 +10,7 @@ interface LoginPayload {
 interface GoogleType {
     name: string;
     email: string;
-    password?: string | null
+    password?: string | Buffer<ArrayBufferLike> | undefined
 }
 interface RegisterPayload {
     name: string;
@@ -23,7 +23,7 @@ const validateEmail = (email: string): boolean => {
     return validator.isEmail(email);
 };
 export const serviceLogin = async (payload: LoginPayload) => {
-    const {email, password } = payload
+    const { email, password } = payload
 
     const users = await selectUsers(email);
 
@@ -80,7 +80,6 @@ export const serviceGoogle = async (payload: GoogleType) => {
     if (exitingUsers && exitingUsers.length > 0) {
         return exitingUsers[0]
     }
-
     await createUsers({
         name,
         email,
