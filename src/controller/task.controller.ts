@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { taskDeleteModule, taskGetModule, taskPostModule, taskUpdateModule } from "../model/module.task.module.js"
 export const getTaskController = async (_: any, res: Response) => {
     try {
-        const response = await taskGetModule();
+        const response = await taskGetModule(); 
         if (response.length === 0) {
             return res.status(403).json({
                 status: false,
@@ -25,9 +25,7 @@ export const createTaskController = async (req: Request, res: Response) => {
     try {
         const id = req.users?.id;
         const body = req.body;
-        console.log(body)
         const [data] = await taskPostModule(body, id);
-        console.log(data)
         if (!data) {
             return res.status(403).json({
                 status: false,
@@ -49,7 +47,7 @@ export const createTaskController = async (req: Request, res: Response) => {
 
 export const updateTakcontroller = async (req: Request, res: Response) => {
     try {
-        let id : string | string[] = req.params?.id;
+        let id: string | string[] = req.params?.id;
         const body = req.body
         const response = await taskUpdateModule(body, id);
         if (!response) {
@@ -61,7 +59,7 @@ export const updateTakcontroller = async (req: Request, res: Response) => {
         return res.status(200).json({
             status: true,
             message: "success update task",
-            data : response
+            data: response
         })
     } catch (error) {
         return res.status(500).json({

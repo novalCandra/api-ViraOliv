@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { serviceLogin, serviceRegister } from "../service/Auth.service.js";
+import { serviceGoogle, serviceLogin, serviceRegister } from "../service/Auth.service.js";
 import nodemailer from "nodemailer"
+import getToken, { ouathClient3, url } from "../middleware/google.middleware.js";
+import { google } from "googleapis";
 require("dotenv").config()
 const optStore: { [key: string]: any } = {};
 export const LoginController = async (req: Request, res: Response) => {
@@ -131,10 +133,59 @@ export const verifyKodeOTPController = async (req: Request, res: Response) => {
             verified: true
         })
     } catch (error) {
+        return res.status(500).json({
+            status: false,
+            message: error
+        })
+    }
+}
+
+export const authGoogleController = async (_: Request, res: Response) => {
+    try {
+        res.redirect(url)
+    } catch (error) {
         console.log(error)
         return res.status(500).json({
             status: false,
             message: error
+        })
+    }
+}
+
+export const callbackAuthGoogle = async (req: Request, res: Response) => {
+    try {
+        const { code } = req.query;
+        console.log(typeof code)
+        const { tokens } = await getToken(code);
+        ouathClient3.setCredentials(tokens)
+        const oauth2 = google.oauth2({
+            auth: ouathClient3,
+            version: "v2"
+        });
+
+        const { data } = await oauth2.userinfo.get();
+        if (!data) {
+            return res.status(403).json({
+                status: false,
+                message: "gagal login menggunakan google"
+            })
+        }
+
+        await serviceGoogle({
+            name: data.name!,
+            email: data.email!,
+        })
+
+        return res.status(201).json({
+            status: true,
+            message: "success login google",
+            data: data
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: false,
+            message: "server error",
+            messageError: error
         })
     }
 }
