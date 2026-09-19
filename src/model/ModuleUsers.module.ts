@@ -4,7 +4,7 @@ const db = dbKnex
 interface TypeUsers {
     name: string;
     email: string;
-    password: string
+    password: string | Buffer<ArrayBufferLike> | undefined
 }
 
 export const selectUsers = async (email: string) => {
